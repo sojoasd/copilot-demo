@@ -194,8 +194,10 @@
 ---
 
 ## 開發技術要求
-- 使用 Node.js 和 Express 框架，在 /src 目錄下建立一個專案。
-- 使用 TypeScript 開發。
-- 使用依賴注入 (DI) 管理書本資料。
+- 使用 Node.js 和 Express 框架，使用 TypeScript 開發，在 /src 目錄下建立一個專案目錄。
+- 專案目錄名稱為 `book-web-api`。
+- 使用 tsyringe 套件執行依賴注入 (DI) 管理書本資料。
 - 書本資料儲存在記憶體中的 JSON 檔案中。
 - 嚴格遵循 RESTful API 設計原則。
+
+
