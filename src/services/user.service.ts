@@ -1,9 +1,12 @@
+import { injectable } from "tsyringe";
+
 type User = {
   id: number;
   name: string;
   createdAt: string;
 };
 
+@injectable()
 export class UserService {
   private users: User[] = [];
   private nextId: number = 1;
