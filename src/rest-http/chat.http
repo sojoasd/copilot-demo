@@ -1,0 +1,35 @@
+### 查詢聊天室列表
+GET http://localhost:3000/api/chat
+Content-Type: application/json
+
+###
+
+### 查詢單一聊天室
+GET http://localhost:3000/api/chat/1
+Content-Type: application/json
+
+###
+
+### 新增聊天室
+POST http://localhost:3000/api/chat
+Content-Type: application/json
+
+{
+  "name": "New Chat Room"
+}
+
+###
+
+### 修改聊天室
+PUT http://localhost:3000/api/chat/1
+Content-Type: application/json
+
+{
+  "name": "Updated Chat Room"
+}
+
+###
+
+### 刪除聊天室
+DELETE http://localhost:3000/api/chat/1
+Content-Type: application/json
