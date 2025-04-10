@@ -149,3 +149,5 @@ ehthumbs.db
 # Temporary files
 *.tmp
 *.temp
+
+aws-key

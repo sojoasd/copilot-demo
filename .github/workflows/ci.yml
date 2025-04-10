@@ -7,43 +7,52 @@ on:
         description: '版本號碼'
         required: true
 
+env:
+  AWS_REGION: ${{ secrets.AWS_REGION }}
+  ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
+  VERSION: ${{ github.event.inputs.version }}
+  COMMIT_SHA: ${{ github.sha }}
+  IMAGE_TAG: ${{ secrets.ECR_REPOSITORY }}:${{ github.event.inputs.version }}-${{ github.sha }}
+
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
 
     steps:
-      # 檢出程式碼
-      - name: Checkout code
-        uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v3
 
-      # 設定 Node.js 環境
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18
 
-      # 輸出版本號碼
-      - name: Set version
-        run: echo "VERSION=${{ github.event.inputs.version }}" >> $GITHUB_ENV
+    - name: Install dependencies
+      run: npm install
 
-      # 取得 Commit SHA
-      - name: Get commit SHA
-        run: echo "COMMIT_SHA=${{ github.sha }}" >> $GITHUB_ENV
+    - name: TypeScript compile check
+      run: npm run build
 
-      # 安裝依賴
-      - name: Install dependencies
-        run: npm install
+    - name: Run tests
+      run: npm test
 
-      # 執行 TypeScript 編譯檢查
-      - name: TypeScript compile check
-        run: npm run build
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_REGION }}
 
-      # 執行測試
-      - name: Run tests
-        run: npm test
+    - name: Login to Amazon ECR
+      uses: aws-actions/amazon-ecr-login@v2
 
-      # 建置 Docker 映像檔
-      - name: Build Docker image
-        run: |
-            docker build -t my-app:${VERSION}-${COMMIT_SHA} .
-            echo "Docker image tag: my-app:${VERSION}-${COMMIT_SHA}"
+    - name: Build Docker image
+      run: |
+        echo "Building image: $IMAGE_TAG"
+        docker build -t $IMAGE_TAG .
+        echo "Built image: $IMAGE_TAG"
+
+    - name: Push Docker image to ECR
+      run: |
+        docker push $IMAGE_TAG
+        echo "Pushed image: $IMAGE_TAG"
