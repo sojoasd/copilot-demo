@@ -1,4 +1,4 @@
-name: CI
+name: CI/CD
 
 on:
   workflow_dispatch:
@@ -6,10 +6,6 @@ on:
       version:
         description: '版本號碼'
         required: true
-  push:
-    branches:
-      - main
-      - actions
 
 jobs:
   build-and-test:
