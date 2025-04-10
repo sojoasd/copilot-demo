@@ -26,6 +26,10 @@ jobs:
       - name: Set version
         run: echo "VERSION=${{ github.event.inputs.version }}" >> $GITHUB_ENV
 
+      # 取得 Commit SHA
+      - name: Get commit SHA
+        run: echo "COMMIT_SHA=${{ github.sha }}" >> $GITHUB_ENV
+
       # 安裝依賴
       - name: Install dependencies
         run: npm install
@@ -41,5 +45,5 @@ jobs:
       # 建置 Docker 映像檔
       - name: Build Docker image
         run: |
-            docker build -t my-app:$VERSION .
-            echo "Docker image tag: my-app:$VERSION"
+            docker build -t my-app:${VERSION}-${COMMIT_SHA} .
+            echo "Docker image tag: my-app:${VERSION}-${COMMIT_SHA}"
