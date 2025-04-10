@@ -37,3 +37,9 @@ jobs:
       # 執行測試
       - name: Run tests
         run: npm test
+
+      # 建置 Docker 映像檔
+      - name: Build Docker image
+        run: |
+            docker build -t my-app:$VERSION .
+            echo "Docker image tag: my-app:$VERSION"
