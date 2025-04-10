@@ -7,7 +7,7 @@ interface Chat {
 }
 
 @injectable()
-class ChatService {
+export class ChatService {
   private chats: Chat[] = [];
   private nextId = 1;
 
